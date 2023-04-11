@@ -1,7 +1,7 @@
 # Code back end Small Test for NodeJS Intern Position
 
 # Introduction 
-KnowledgeSpace is a open source project for everyone.
+Open source project for everyone.
 
 # Getting Started
 
