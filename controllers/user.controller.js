@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
 import fs from "fs";
+import sequelize from "../config/db.js";
+import { Op } from "sequelize";
 
 import mailer from "../utils/mailer.js";
 import createError from "../utils/createError.js";
-import Users from "../models/user.model.js";
+import Users from "../models/User.model.js";
 
 const base64_encode = (file) => {
   return "data:image/gif;base64," + fs.readFileSync(file, "base64");

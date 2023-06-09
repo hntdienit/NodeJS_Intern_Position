@@ -6,24 +6,12 @@ import emailExistence from "email-existence";
 
 import mailer from "../utils/mailer.js";
 import createError from "../utils/createError.js";
+import { endCode } from "../middlewares/auth.middleware.js";
 
-import Users from "../models/user.model.js";
-
-const endCode = (id, email, role) => {
-  return jwt.sign(
-    {
-      iss: "thanhdien",
-      sub: { id, email, role },
-      iat: new Date().setTime(),
-      exp: new Date().setDate(new Date().getDate() + 3),
-    },
-    process.env.JWT_SECRET
-  );
-};
+import Users from "../models/User.model.js";
 
 export const register = async (req, res, next) => {
   try {
-
     const user = await Users.findOne({ where: { email: req.body.email } });
 
     if (user) return res.status(200).json({ error: "Email has been registered account!" });
@@ -55,8 +43,6 @@ export const register = async (req, res, next) => {
         return res.json({ error: "Email does not exist!" });
       }
     });
-
-    // res.status(201).send();
   } catch (err) {
     next(err);
   }
@@ -101,4 +87,24 @@ export const logout = async (req, res) => {
     })
     .status(200)
     .send("You have successfully signed out. Goodbye!");
+};
+
+export const googleSuccess = async (req, res) => {
+  const user = req.user;
+  if (!user) return res.redirect("/auth/callback/failure");
+  const accessToken = endCode(user.id, user.email, user.role);
+  return res
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+    })
+    .status(200)
+    .json({
+      userId: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      avatarImage: user.avatarImage,
+      role: user.role,
+      AccessToken: accessToken,
+    });
 };

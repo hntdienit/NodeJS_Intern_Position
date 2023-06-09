@@ -11,6 +11,7 @@ const Users = sequelize.define(
     avatarImage: { type: DataTypes.TEXT, allowNull: true },
     role: { type: DataTypes.STRING, defaultValue: "user" },
     emailVerified: { type: DataTypes.INTEGER, defaultValue: "0" },
+    authGoogle: { type: DataTypes.STRING, allowNull: true },
   },
   {
     // Other model options go here

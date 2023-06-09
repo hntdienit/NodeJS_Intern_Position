@@ -7,6 +7,9 @@ import sequelize from "./config/db.js";
 import relationship from "./models/Relationship.js";
 import router from "./routes/index.js";
 
+import passport from "passport";
+import cookieSession from "cookie-session";
+
 const app = express();
 
 /* connection Mysql */
@@ -35,6 +38,32 @@ app.use(
 );
 
 app.use(express.static("public"));
+
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+    // sessionSameSite: "none",
+    // cookieIpCheck: "none",
+  })
+);
+
+app.use((req, res, next) => {
+  if (req.session && !req.session.regenerate) {
+    req.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (req.session && !req.session.save) {
+    req.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 /* routes */
 router(app);

@@ -5,9 +5,10 @@ import createError from "../utils/createError.js";
 
 const router = (app) => {
   app.get("/", (req, res, next) => {
-    return res.status(200).json({
-      message: "server run ok!",
-    });
+    // return res.status(200).json({
+    //   message: "server run ok!",
+    // });
+    return res.send("<button><a href='/auth/google'>Login With Google</a></button>");
   });
 
   app.use("/auth", authRoute);
